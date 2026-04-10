@@ -7,11 +7,7 @@ import { useState, useEffect } from "react";
 function OikosLogoIcon({ size = 40, color = "#4169E1" }: { size?: number; color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path
-        d="M20 6L6 17H10V34H18V24H22V34H30V17H34L20 6Z"
-        fill={color}
-        strokeLinejoin="round"
-      />
+      <path d="M20 6L6 17H10V34H18V24H22V34H30V17H34L20 6Z" fill={color} strokeLinejoin="round" />
     </svg>
   );
 }
@@ -20,7 +16,6 @@ function ShieldCheckIcon({ size = 48 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="10" y="8" width="28" height="32" rx="4" fill="white" opacity="0.9" />
-      <path d="M17 24l5 5 9-10" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" opacity="0" />
       <rect x="14" y="12" width="20" height="24" rx="2" fill="white" opacity="0.3" />
       <path d="M16 23l5 5 11-11" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
     </svg>
@@ -51,7 +46,7 @@ function DollarIcon({ size = 52 }: { size?: number }) {
 
 function GoogleIcon() {
   return (
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
       <path d="M19.6 10.23c0-.68-.06-1.36-.18-2H10v3.77h5.4a4.6 4.6 0 01-2 3.02v2.5h3.24C18.36 15.8 19.6 13.26 19.6 10.23z" fill="#4285F4" />
       <path d="M10 20c2.7 0 4.97-.9 6.62-2.43l-3.24-2.51c-.9.6-2.04.96-3.38.96-2.6 0-4.8-1.75-5.59-4.12H1.08v2.6A10 10 0 0010 20z" fill="#34A853" />
       <path d="M4.41 11.9A5.94 5.94 0 014.1 10c0-.66.11-1.3.31-1.9V5.5H1.08A10 10 0 000 10c0 1.61.39 3.14 1.08 4.5l3.33-2.6z" fill="#FBBC05" />
@@ -62,9 +57,28 @@ function GoogleIcon() {
 
 function AppleIcon() {
   return (
-    <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width="18" height="20" viewBox="0 0 18 20" fill="none">
       <path d="M14.96 10.6c-.02-2.27 1.85-3.36 1.93-3.41-1.05-1.54-2.68-1.75-3.27-1.78-1.4-.14-2.73.83-3.44.83-.7 0-1.79-.8-2.95-.78-1.52.02-2.92.89-3.7 2.26-1.58 2.74-.41 6.82 1.13 9.05.75 1.09 1.65 2.31 2.82 2.27 1.14-.05 1.57-.74 2.94-.74 1.38 0 1.77.74 2.97.72 1.21-.02 1.99-1.1 2.74-2.2.86-1.26 1.22-2.48 1.24-2.54-.03-.01-2.38-.91-2.41-3.68z" fill="white" />
       <path d="M12.7 3.56C13.3 2.83 13.72 1.82 13.6.79c-.87.05-1.91.58-2.53 1.3-.56.64-1.04 1.67-.91 2.65.96.07 1.94-.48 2.54-1.18z" fill="white" />
+    </svg>
+  );
+}
+
+// ─── Nav icons ───────────────────────────────────────────────────────────────
+
+function NavIcon({ type }: { type: "home" | "search" | "orders" | "chat" | "profile" }) {
+  const icons = {
+    home: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z M9 22V12h6v10",
+    search: "M21 21l-4.35-4.35M17 11A6 6 0 115 11a6 6 0 0112 0z",
+    orders: "M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2",
+    chat: "M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z",
+    profile: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 11a4 4 0 100-8 4 4 0 000 8z",
+  };
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      {icons[type].split(" M").map((d, i) => (
+        <path key={i} d={i === 0 ? d : "M" + d} />
+      ))}
     </svg>
   );
 }
@@ -75,15 +89,7 @@ function Dots({ total, active, color = "white" }: { total: number; active: numbe
   return (
     <div className="flex gap-2 justify-center">
       {Array.from({ length: total }).map((_, i) => (
-        <div
-          key={i}
-          className="rounded-full transition-all duration-300"
-          style={{
-            width: i === active ? 20 : 8,
-            height: 8,
-            backgroundColor: i === active ? color : `${color}55`,
-          }}
-        />
+        <div key={i} className="rounded-full transition-all duration-300" style={{ width: i === active ? 20 : 8, height: 8, backgroundColor: i === active ? color : `${color}55` }} />
       ))}
     </div>
   );
@@ -99,22 +105,13 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="flex flex-col h-full">
-      {/* Top blue section */}
-      <div
-        className="flex flex-1 flex-col items-center justify-center"
-        style={{ backgroundColor: "#4169E1" }}
-      >
+      <div className="flex flex-1 flex-col items-center justify-center" style={{ backgroundColor: "#4169E1" }}>
         <div className="bg-white rounded-full p-5 shadow-lg mb-4">
           <OikosLogoIcon size={52} color="#4169E1" />
         </div>
         <h1 className="text-white text-3xl font-bold tracking-wide">Oíkos</h1>
       </div>
-
-      {/* Bottom navy section */}
-      <div
-        className="flex flex-col items-center justify-between py-10 px-6"
-        style={{ backgroundColor: "#1A2F7A", minHeight: "38%" }}
-      >
+      <div className="flex flex-col items-center justify-between py-10 px-6" style={{ backgroundColor: "#1A2F7A", minHeight: "38%" }}>
         <div className="text-center">
           <h2 className="text-white text-2xl font-bold mb-1">Oíkos</h2>
           <p className="text-blue-200 text-sm">Conexão de Serviços</p>
@@ -130,45 +127,21 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
 function Onboarding1({ onNext, onSkip }: { onNext: () => void; onSkip: () => void }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Illustration area */}
       <div className="flex flex-col items-center justify-center flex-1 bg-gray-100 relative">
-        <div
-          className="rounded-full flex items-center justify-center shadow-lg"
-          style={{ width: 140, height: 140, backgroundColor: "#4169E1" }}
-        >
+        <div className="rounded-full flex items-center justify-center shadow-lg" style={{ width: 140, height: 140, backgroundColor: "#4169E1" }}>
           <ShieldCheckIcon size={60} />
         </div>
-        {/* Green badge */}
-        <div
-          className="absolute bottom-8 px-5 py-2 rounded-full"
-          style={{ backgroundColor: "#22C55E" }}
-        >
+        <div className="absolute bottom-8 px-5 py-2 rounded-full" style={{ backgroundColor: "#22C55E" }}>
           <span className="text-white text-sm font-semibold">Verificado e Certificado</span>
         </div>
-        {/* Dots */}
-        <div className="absolute bottom-2">
-          <Dots total={2} active={0} color="#4169E1" />
-        </div>
+        <div className="absolute bottom-2"><Dots total={2} active={0} color="#4169E1" /></div>
       </div>
-
-      {/* Content area */}
       <div className="flex flex-col px-8 py-8 gap-4" style={{ minHeight: "50%" }}>
         <h2 className="text-2xl font-bold text-gray-900">Profissionais Verificados</h2>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          Todos passam por verificação de identidade, certificação técnica e avaliação por histórico
-          de serviços realizados.
-        </p>
+        <p className="text-gray-500 text-sm leading-relaxed">Todos passam por verificação de identidade, certificação técnica e avaliação por histórico de serviços realizados.</p>
         <div className="flex-1" />
-        <button
-          onClick={onNext}
-          className="w-full py-4 rounded-xl font-semibold text-white text-base transition active:opacity-80"
-          style={{ backgroundColor: "#4169E1" }}
-        >
-          Próximo
-        </button>
-        <button onClick={onSkip} className="text-center text-gray-400 text-sm py-1">
-          Pular
-        </button>
+        <button onClick={onNext} className="w-full py-4 rounded-xl font-semibold text-white text-base" style={{ backgroundColor: "#4169E1" }}>Próximo</button>
+        <button onClick={onSkip} className="text-center text-gray-400 text-sm py-1">Pular</button>
       </div>
     </div>
   );
@@ -179,41 +152,18 @@ function Onboarding1({ onNext, onSkip }: { onNext: () => void; onSkip: () => voi
 function Onboarding2({ onNext, onSkip }: { onNext: () => void; onSkip: () => void }) {
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: "#FDF0E8" }}>
-      {/* Illustration area */}
-      <div
-        className="flex flex-col items-center justify-center flex-1 relative"
-        style={{ backgroundColor: "#FEF3EC" }}
-      >
-        <div
-          className="rounded-full flex items-center justify-center shadow-lg"
-          style={{ width: 140, height: 140, backgroundColor: "#E8643C" }}
-        >
+      <div className="flex flex-col items-center justify-center flex-1 relative" style={{ backgroundColor: "#FEF3EC" }}>
+        <div className="rounded-full flex items-center justify-center shadow-lg" style={{ width: 140, height: 140, backgroundColor: "#E8643C" }}>
           <CalendarIcon />
         </div>
-        {/* Dots */}
-        <div className="absolute bottom-4">
-          <Dots total={2} active={1} color="#E8643C" />
-        </div>
+        <div className="absolute bottom-4"><Dots total={2} active={1} color="#E8643C" /></div>
       </div>
-
-      {/* Content area */}
       <div className="flex flex-col px-8 py-8 gap-4" style={{ minHeight: "50%" }}>
         <h2 className="text-2xl font-bold text-gray-900">Agende com Segurança</h2>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          Escolha data e horário, confirme o serviço e receba notificações em tempo real.
-          Sem surpresas, sem preocupações.
-        </p>
+        <p className="text-gray-500 text-sm leading-relaxed">Escolha data e horário, confirme o serviço e receba notificações em tempo real. Sem surpresas, sem preocupações.</p>
         <div className="flex-1" />
-        <button
-          onClick={onNext}
-          className="w-full py-4 rounded-xl font-semibold text-white text-base transition active:opacity-80"
-          style={{ backgroundColor: "#E8643C" }}
-        >
-          Próximo
-        </button>
-        <button onClick={onSkip} className="text-center text-gray-400 text-sm py-1">
-          Pular
-        </button>
+        <button onClick={onNext} className="w-full py-4 rounded-xl font-semibold text-white text-base" style={{ backgroundColor: "#E8643C" }}>Próximo</button>
+        <button onClick={onSkip} className="text-center text-gray-400 text-sm py-1">Pular</button>
       </div>
     </div>
   );
@@ -224,38 +174,17 @@ function Onboarding2({ onNext, onSkip }: { onNext: () => void; onSkip: () => voi
 function Onboarding3({ onStart }: { onStart: () => void }) {
   return (
     <div className="flex flex-col h-full" style={{ backgroundColor: "#F0FDF4" }}>
-      {/* Illustration area */}
-      <div
-        className="flex flex-col items-center justify-center flex-1 relative"
-        style={{ backgroundColor: "#ECFDF5" }}
-      >
-        <div
-          className="rounded-full flex items-center justify-center shadow-lg"
-          style={{ width: 140, height: 140, backgroundColor: "#10B981" }}
-        >
+      <div className="flex flex-col items-center justify-center flex-1 relative" style={{ backgroundColor: "#ECFDF5" }}>
+        <div className="rounded-full flex items-center justify-center shadow-lg" style={{ width: 140, height: 140, backgroundColor: "#10B981" }}>
           <DollarIcon size={52} />
         </div>
-        {/* Dots */}
-        <div className="absolute bottom-4">
-          <Dots total={3} active={2} color="#10B981" />
-        </div>
+        <div className="absolute bottom-4"><Dots total={3} active={2} color="#10B981" /></div>
       </div>
-
-      {/* Content area */}
       <div className="flex flex-col px-8 py-8 gap-4" style={{ minHeight: "50%" }}>
         <h2 className="text-2xl font-bold underline text-gray-900">Pagamento Protegido</h2>
-        <p className="text-gray-500 text-sm leading-relaxed">
-          Pague somente após o serviço concluído. Garantia contra danos e furtos em todos
-          os contratos fechados.
-        </p>
+        <p className="text-gray-500 text-sm leading-relaxed">Pague somente após o serviço concluído. Garantia contra danos e furtos em todos os contratos fechados.</p>
         <div className="flex-1" />
-        <button
-          onClick={onStart}
-          className="w-full py-4 rounded-xl font-semibold text-white text-base transition active:opacity-80"
-          style={{ backgroundColor: "#10B981" }}
-        >
-          Começar Agora
-        </button>
+        <button onClick={onStart} className="w-full py-4 rounded-xl font-semibold text-white text-base" style={{ backgroundColor: "#10B981" }}>Começar Agora</button>
       </div>
     </div>
   );
@@ -263,18 +192,26 @@ function Onboarding3({ onStart }: { onStart: () => void }) {
 
 // ─── Screen 5: Login ─────────────────────────────────────────────────────────
 
-function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const CREDENTIALS = {
+  cliente: { email: "cliente@oikos.com", senha: "123456" },
+  profissional: { email: "profissional@oikos.com", senha: "123456" },
+};
+
+function LoginScreen({ onLogin }: { onLogin: (role: "cliente" | "profissional") => void }) {
   const [role, setRole] = useState<"cliente" | "profissional">("cliente");
+  const [error, setError] = useState(false);
+
+  const email = CREDENTIALS[role].email;
+  const senha = CREDENTIALS[role].senha;
+
+  function handleLogin() {
+    onLogin(role);
+  }
 
   return (
     <div className="flex flex-col h-full bg-white">
       {/* Blue header */}
-      <div
-        className="flex flex-col items-center justify-center py-10 px-6 gap-3"
-        style={{ backgroundColor: "#4169E1", minHeight: "30%" }}
-      >
+      <div className="flex flex-col items-center justify-center py-10 px-6 gap-3" style={{ backgroundColor: "#4169E1", minHeight: "30%" }}>
         <div className="bg-white rounded-full p-3 shadow">
           <OikosLogoIcon size={36} color="#4169E1" />
         </div>
@@ -286,101 +223,174 @@ function LoginScreen() {
 
       {/* Form */}
       <div className="flex flex-col flex-1 px-6 py-6 gap-4 overflow-y-auto">
-        {/* Email */}
-        <div className="flex flex-col gap-1">
-          <input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-700 outline-none focus:border-blue-400 transition placeholder-gray-400"
-          />
+        {/* Role selector primeiro para mudar as credenciais */}
+        <div className="flex flex-col gap-2">
+          <span className="text-sm font-medium text-gray-700">Você é:</span>
+          <div className="flex gap-3">
+            {(["cliente", "profissional"] as const).map((r) => (
+              <button
+                key={r}
+                onClick={() => { setRole(r); setError(false); }}
+                className="flex-1 py-3 rounded-xl text-sm font-semibold border transition"
+                style={role === r ? { backgroundColor: "#4169E1", color: "white", borderColor: "#4169E1" } : { backgroundColor: "white", color: "#6B7280", borderColor: "#E5E7EB" }}
+              >
+                {r === "cliente" ? "Cliente" : "Profissional"}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Password */}
-        <div className="flex flex-col gap-1">
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-700 outline-none focus:border-blue-400 transition placeholder-gray-400"
-          />
+        {/* E-mail pré-preenchido */}
+        <div className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-700 bg-gray-50">
+          {email}
         </div>
 
-        {/* Forgot password */}
+        {/* Senha pré-preenchida (mascarada) */}
+        <div className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-gray-400 bg-gray-50 tracking-widest">
+          {"•".repeat(senha.length)}
+        </div>
+
         <div className="text-right -mt-2">
-          <button className="text-sm font-medium" style={{ color: "#4169E1" }}>
-            Esqueceu a senha?
-          </button>
+          <button className="text-sm font-medium" style={{ color: "#4169E1" }}>Esqueceu a senha?</button>
         </div>
 
-        {/* Login button */}
+        {error && (
+          <p className="text-red-500 text-xs text-center -mt-2">Credenciais inválidas. Use as credenciais padrão.</p>
+        )}
+
         <button
+          onClick={handleLogin}
           className="w-full py-4 rounded-xl font-semibold text-white text-base transition active:opacity-80"
           style={{ backgroundColor: "#4169E1" }}
         >
           Entrar
         </button>
 
-        {/* Divider */}
         <div className="flex items-center gap-3">
           <div className="flex-1 h-px bg-gray-200" />
           <span className="text-gray-400 text-xs">ou continue com</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
-        {/* Social buttons */}
         <div className="flex gap-3">
-          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-700 bg-white transition active:bg-gray-50">
-            <GoogleIcon />
-            Google
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-3 text-sm font-medium text-gray-700 bg-white">
+            <GoogleIcon /> Google
           </button>
-          <button
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-medium text-white transition active:opacity-80"
-            style={{ backgroundColor: "#111827" }}
-          >
-            <AppleIcon />
-            Apple
+          <button className="flex-1 flex items-center justify-center gap-2 rounded-xl py-3 text-sm font-medium text-white" style={{ backgroundColor: "#111827" }}>
+            <AppleIcon /> Apple
           </button>
         </div>
 
-        {/* Register link */}
         <div className="text-center text-sm text-gray-500">
           Não tem conta?{" "}
-          <button className="font-semibold" style={{ color: "#4169E1" }}>
-            Cadastre-se grátis
-          </button>
+          <button className="font-semibold" style={{ color: "#4169E1" }}>Cadastre-se grátis</button>
         </div>
+      </div>
+    </div>
+  );
+}
 
-        {/* Role selector */}
-        <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium text-gray-700">Você é:</span>
-          <div className="flex gap-3">
-            <button
-              onClick={() => setRole("cliente")}
-              className="flex-1 py-3 rounded-xl text-sm font-semibold border transition"
-              style={
-                role === "cliente"
-                  ? { backgroundColor: "#4169E1", color: "white", borderColor: "#4169E1" }
-                  : { backgroundColor: "white", color: "#6B7280", borderColor: "#E5E7EB" }
-              }
-            >
-              Cliente
-            </button>
-            <button
-              onClick={() => setRole("profissional")}
-              className="flex-1 py-3 rounded-xl text-sm font-semibold border transition"
-              style={
-                role === "profissional"
-                  ? { backgroundColor: "#4169E1", color: "white", borderColor: "#4169E1" }
-                  : { backgroundColor: "white", color: "#6B7280", borderColor: "#E5E7EB" }
-              }
-            >
-              Profissional
-            </button>
+// ─── Screen 6: Home Cliente ───────────────────────────────────────────────────
+
+const categories = [
+  { label: "Elétrica", color: "#F59E0B" },
+  { label: "Limpeza", color: "#22C55E" },
+  { label: "Jardim", color: "#16A34A" },
+  { label: "Hidraul.", color: "#3B82F6" },
+  { label: "Reformas", color: "#EF4444" },
+  { label: "Pintura", color: "#A855F7" },
+];
+
+const professionals = [
+  { name: "Carlos S.", role: "Eletricista", rating: 4.9, initial: "C", color: "#4169E1" },
+  { name: "Ana R.", role: "Diarista", rating: 4.8, initial: "A", color: "#F97316" },
+];
+
+function HomeCliente({ onLogout }: { onLogout: () => void }) {
+  const [activeTab, setActiveTab] = useState("home");
+
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      {/* Header */}
+      <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex justify-between items-start mb-1">
+          <p className="text-blue-200 text-sm">Boa tarde, Robson!</p>
+          <button onClick={onLogout} className="text-blue-200 text-xs border border-blue-300 rounded-lg px-2 py-1">Sair</button>
+        </div>
+        <h1 className="text-white text-xl font-bold mb-4">Que serviço precisa hoje?</h1>
+        {/* Search bar */}
+        <div className="flex items-center gap-2 bg-white rounded-xl px-4 py-3">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <span className="text-gray-400 text-sm">Buscar serviço ou profissional...</span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-5">
+        {/* Categorias */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <span className="font-bold text-gray-900 text-base">Categorias</span>
+            <button className="text-xs font-medium" style={{ color: "#4169E1" }}>Ver todas</button>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            {categories.map((cat) => (
+              <button key={cat.label} className="flex flex-col items-center gap-2 bg-white rounded-xl py-3 shadow-sm">
+                <div className="rounded-full w-10 h-10" style={{ backgroundColor: cat.color }} />
+                <span className="text-xs text-gray-600 font-medium">{cat.label}</span>
+              </button>
+            ))}
           </div>
         </div>
+
+        {/* Destaques */}
+        <div>
+          <div className="flex justify-between items-center mb-3">
+            <span className="font-bold text-gray-900 text-base">Destaques</span>
+            <button className="text-xs font-medium" style={{ color: "#4169E1" }}>Ver todos</button>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            {professionals.map((pro) => (
+              <div key={pro.name} className="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center gap-2">
+                <div className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold" style={{ backgroundColor: pro.color }}>
+                  {pro.initial}
+                </div>
+                <div className="text-center">
+                  <p className="font-semibold text-gray-900 text-sm">{pro.name}</p>
+                  <p className="text-gray-400 text-xs">{pro.role}</p>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-yellow-400 text-sm">★</span>
+                  <span className="text-xs text-gray-600 font-medium">{pro.rating}</span>
+                </div>
+                <button className="w-full py-2 rounded-lg text-white text-xs font-semibold" style={{ backgroundColor: "#4169E1" }}>
+                  Agendar
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom nav */}
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "home", label: "Início", icon: "home" as const },
+          { id: "search", label: "Buscar", icon: "search" as const },
+          { id: "orders", label: "Pedidos", icon: "orders" as const },
+          { id: "chat", label: "Chat", icon: "chat" as const },
+          { id: "profile", label: "Perfil", icon: "profile" as const },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: activeTab === tab.id ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -388,7 +398,7 @@ function LoginScreen() {
 
 // ─── App Shell ───────────────────────────────────────────────────────────────
 
-type Screen = "splash" | "onboarding1" | "onboarding2" | "onboarding3" | "login";
+type Screen = "splash" | "onboarding1" | "onboarding2" | "onboarding3" | "login" | "home-cliente";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -399,62 +409,36 @@ export default function Home() {
     onboarding2: "03 – Onboarding 2",
     onboarding3: "04 – Onboarding 3",
     login: "05 – Login",
+    "home-cliente": "06 – Home",
   };
+
+  function handleLogin(role: "cliente" | "profissional") {
+    if (role === "cliente") setScreen("home-cliente");
+  }
 
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
-        {/* Screen label (for design reference) */}
         <p className="text-xs text-gray-400 mb-2 font-mono">{screenLabels[screen]}</p>
-
-        {/* Phone frame */}
-        <div
-          className="relative overflow-hidden shadow-2xl"
-          style={{
-            borderRadius: 40,
-            height: 780,
-            backgroundColor: "#fff",
-          }}
-        >
-          {screen === "splash" && (
-            <SplashScreen onDone={() => setScreen("onboarding1")} />
-          )}
-          {screen === "onboarding1" && (
-            <Onboarding1
-              onNext={() => setScreen("onboarding2")}
-              onSkip={() => setScreen("login")}
-            />
-          )}
-          {screen === "onboarding2" && (
-            <Onboarding2
-              onNext={() => setScreen("onboarding3")}
-              onSkip={() => setScreen("login")}
-            />
-          )}
-          {screen === "onboarding3" && (
-            <Onboarding3 onStart={() => setScreen("login")} />
-          )}
-          {screen === "login" && <LoginScreen />}
+        <div className="relative overflow-hidden shadow-2xl" style={{ borderRadius: 40, height: 780, backgroundColor: "#fff" }}>
+          {screen === "splash" && <SplashScreen onDone={() => setScreen("onboarding1")} />}
+          {screen === "onboarding1" && <Onboarding1 onNext={() => setScreen("onboarding2")} onSkip={() => setScreen("login")} />}
+          {screen === "onboarding2" && <Onboarding2 onNext={() => setScreen("onboarding3")} onSkip={() => setScreen("login")} />}
+          {screen === "onboarding3" && <Onboarding3 onStart={() => setScreen("login")} />}
+          {screen === "login" && <LoginScreen onLogin={handleLogin} />}
+          {screen === "home-cliente" && <HomeCliente onLogout={() => setScreen("login")} />}
         </div>
-
-        {/* Navigation buttons */}
         <div className="flex gap-2 mt-4 flex-wrap justify-center">
-          {(["splash", "onboarding1", "onboarding2", "onboarding3", "login"] as Screen[]).map(
-            (s) => (
-              <button
-                key={s}
-                onClick={() => setScreen(s)}
-                className="px-3 py-1.5 rounded-lg text-xs font-medium transition"
-                style={
-                  screen === s
-                    ? { backgroundColor: "#4169E1", color: "white" }
-                    : { backgroundColor: "#e5e7eb", color: "#374151" }
-                }
-              >
-                {screenLabels[s].split("–")[0].trim()}
-              </button>
-            )
-          )}
+          {(["splash", "onboarding1", "onboarding2", "onboarding3", "login", "home-cliente"] as Screen[]).map((s) => (
+            <button
+              key={s}
+              onClick={() => setScreen(s)}
+              className="px-3 py-1.5 rounded-lg text-xs font-medium transition"
+              style={screen === s ? { backgroundColor: "#4169E1", color: "white" } : { backgroundColor: "#e5e7eb", color: "#374151" }}
+            >
+              {screenLabels[s].split("–")[0].trim()}
+            </button>
+          ))}
         </div>
       </div>
     </div>
