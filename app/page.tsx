@@ -1077,94 +1077,141 @@ export default function Home() {
     if (role === "cliente") setScreen("home-cliente");
   }
 
+  const screenContent = (
+    <>
+      {screen === "splash" && <SplashScreen onDone={() => setScreen("onboarding1")} />}
+      {screen === "onboarding1" && <Onboarding1 onNext={() => setScreen("onboarding2")} onSkip={() => setScreen("login")} />}
+      {screen === "onboarding2" && <Onboarding2 onNext={() => setScreen("onboarding3")} onSkip={() => setScreen("login")} />}
+      {screen === "onboarding3" && <Onboarding3 onStart={() => setScreen("login")} />}
+      {screen === "login" && <LoginScreen onLogin={handleLogin} />}
+      {screen === "home-cliente" && (
+        <HomeCliente
+          onLogout={() => setScreen("login")}
+          onOpenCategory={(category) => {
+            setSelectedCategory(category);
+            setScreen("profissionais");
+          }}
+          onOpenProfessional={(name) => {
+            setSelectedProfessional(name);
+            setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
+            setScreen("perfil");
+          }}
+        />
+      )}
+      {screen === "profissionais" && (
+        <ProfessionalsListScreen
+          category={selectedCategory}
+          onBack={() => setScreen("home-cliente")}
+          onSelectProfessional={(name) => {
+            setSelectedProfessional(name);
+            setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
+            setScreen("perfil");
+          }}
+        />
+      )}
+      {screen === "perfil" && (
+        <ProfessionalProfileScreen
+          professional={professional}
+          onBack={() => setScreen("profissionais")}
+          onSchedule={(service) => {
+            setSelectedService(service);
+            setScreen("agendamento");
+          }}
+        />
+      )}
+      {screen === "agendamento" && (
+        <ScheduleScreen
+          professional={professional}
+          selectedService={selectedService}
+          onBack={() => setScreen("perfil")}
+          onConfirm={() => setScreen("pagamento")}
+        />
+      )}
+      {screen === "pagamento" && (
+        <PaymentScreen
+          professional={professional}
+          selectedService={selectedService}
+          onBack={() => setScreen("agendamento")}
+          onPay={() => setScreen("confirmado")}
+        />
+      )}
+      {screen === "confirmado" && <OrderConfirmedScreen onTrack={() => setScreen("chat")} />}
+      {screen === "chat" && <ChatScreen onBack={() => setScreen("confirmado")} />}
+    </>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
-      <div className="w-full max-w-sm">
-        <p className="text-xs text-gray-400 mb-2 font-mono">{screenLabels[screen]}</p>
-        <div className="relative overflow-hidden shadow-2xl" style={{ borderRadius: 40, height: 780, backgroundColor: "#fff" }}>
-          {screen === "splash" && <SplashScreen onDone={() => setScreen("onboarding1")} />}
-          {screen === "onboarding1" && <Onboarding1 onNext={() => setScreen("onboarding2")} onSkip={() => setScreen("login")} />}
-          {screen === "onboarding2" && <Onboarding2 onNext={() => setScreen("onboarding3")} onSkip={() => setScreen("login")} />}
-          {screen === "onboarding3" && <Onboarding3 onStart={() => setScreen("login")} />}
-          {screen === "login" && <LoginScreen onLogin={handleLogin} />}
-          {screen === "home-cliente" && (
-            <HomeCliente
-              onLogout={() => setScreen("login")}
-              onOpenCategory={(category) => {
-                setSelectedCategory(category);
-                setScreen("profissionais");
-              }}
-              onOpenProfessional={(name) => {
-                setSelectedProfessional(name);
-                setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
-                setScreen("perfil");
-              }}
-            />
-          )}
-          {screen === "profissionais" && (
-            <ProfessionalsListScreen
-              category={selectedCategory}
-              onBack={() => setScreen("home-cliente")}
-              onSelectProfessional={(name) => {
-                setSelectedProfessional(name);
-                setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
-                setScreen("perfil");
-              }}
-            />
-          )}
-          {screen === "perfil" && (
-            <ProfessionalProfileScreen
-              professional={professional}
-              onBack={() => setScreen("profissionais")}
-              onSchedule={(service) => {
-                setSelectedService(service);
-                setScreen("agendamento");
-              }}
-            />
-          )}
-          {screen === "agendamento" && (
-            <ScheduleScreen
-              professional={professional}
-              selectedService={selectedService}
-              onBack={() => setScreen("perfil")}
-              onConfirm={() => setScreen("pagamento")}
-            />
-          )}
-          {screen === "pagamento" && (
-            <PaymentScreen
-              professional={professional}
-              selectedService={selectedService}
-              onBack={() => setScreen("agendamento")}
-              onPay={() => setScreen("confirmado")}
-            />
-          )}
-          {screen === "confirmado" && <OrderConfirmedScreen onTrack={() => setScreen("chat")} />}
-          {screen === "chat" && <ChatScreen onBack={() => setScreen("confirmado")} />}
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+      <div className="w-full max-w-6xl mx-auto">
+        <div className="hidden md:grid grid-cols-[260px_1fr] gap-6">
+          <aside className="bg-white rounded-3xl shadow-lg p-6 flex flex-col gap-6">
+            <div className="flex items-center gap-3">
+              <div className="bg-blue-50 rounded-2xl p-3">
+                <OikosLogoIcon size={32} color="#4169E1" />
+              </div>
+              <div>
+                <p className="text-xs text-gray-400">Oíkos</p>
+                <h2 className="text-lg font-semibold text-gray-900">Versão Desktop</h2>
+              </div>
+            </div>
+            <div>
+              <p className="text-xs uppercase text-gray-400">Tela ativa</p>
+              <p className="text-sm font-semibold text-gray-800">{screenLabels[screen]}</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              {(Object.keys(screenLabels) as Screen[]).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setScreen(s)}
+                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold transition"
+                  style={screen === s ? { backgroundColor: "#4169E1", color: "white" } : { backgroundColor: "#f3f4f6", color: "#374151" }}
+                >
+                  {screenLabels[s]}
+                </button>
+              ))}
+            </div>
+            <div className="mt-auto text-xs text-gray-400">
+              Layout otimizado para desktop e mobile.
+            </div>
+          </aside>
+
+          <main className="bg-white rounded-3xl shadow-2xl overflow-hidden" style={{ minHeight: 820 }}>
+            {screenContent}
+          </main>
         </div>
-        <div className="flex gap-2 mt-4 flex-wrap justify-center">
-          {([
-            "splash",
-            "onboarding1",
-            "onboarding2",
-            "onboarding3",
-            "login",
-            "home-cliente",
-            "profissionais",
-            "perfil",
-            "agendamento",
-            "pagamento",
-            "confirmado",
-            "chat",
-          ] as Screen[]).map((s) => (
-            <button
-              key={s}
-              onClick={() => setScreen(s)}
-              className="px-3 py-1.5 rounded-lg text-xs font-medium transition"
-              style={screen === s ? { backgroundColor: "#4169E1", color: "white" } : { backgroundColor: "#e5e7eb", color: "#374151" }}
-            >
-              {screenLabels[s].split("–")[0].trim()}
-            </button>
-          ))}
+
+        <div className="md:hidden">
+          <div className="w-full max-w-sm mx-auto">
+            <p className="text-xs text-gray-400 mb-2 font-mono">{screenLabels[screen]}</p>
+            <div className="relative overflow-hidden shadow-2xl" style={{ borderRadius: 40, height: 780, backgroundColor: "#fff" }}>
+              {screenContent}
+            </div>
+            <div className="flex gap-2 mt-4 flex-wrap justify-center">
+              {([
+                "splash",
+                "onboarding1",
+                "onboarding2",
+                "onboarding3",
+                "login",
+                "home-cliente",
+                "profissionais",
+                "perfil",
+                "agendamento",
+                "pagamento",
+                "confirmado",
+                "chat",
+              ] as Screen[]).map((s) => (
+                <button
+                  key={s}
+                  onClick={() => setScreen(s)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium transition"
+                  style={screen === s ? { backgroundColor: "#4169E1", color: "white" } : { backgroundColor: "#e5e7eb", color: "#374151" }}
+                >
+                  {screenLabels[s].split("–")[0].trim()}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
