@@ -933,6 +933,9 @@ function HomeCliente({
   onOpenProfessional: (name: string) => void;
 }) {
   const [activeTab, setActiveTab] = useState("home");
+  const highlightProfessionals = categories
+    .map((cat) => professionals.find((pro) => pro.category === cat.label))
+    .filter((pro): pro is (typeof professionals)[number] => Boolean(pro));
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -979,7 +982,7 @@ function HomeCliente({
             <button className="text-xs font-medium" style={{ color: "#4169E1" }}>Ver todos</button>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {professionals.map((pro) => (
+            {highlightProfessionals.map((pro) => (
               <div key={pro.name} className="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center gap-2">
                 <img
                   src={pro.photo}
