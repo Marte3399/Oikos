@@ -12,6 +12,505 @@ function OikosLogoIcon({ size = 40, color = "#4169E1" }: { size?: number; color?
   );
 }
 
+// ─── Screen 7: Lista de Profissionais ───────────────────────────────────────
+
+function ProfessionalsListScreen({
+  category,
+  onBack,
+  onSelectProfessional,
+}: {
+  category: string;
+  onBack: () => void;
+  onSelectProfessional: (name: string) => void;
+}) {
+  const filteredProfessionals = professionals.filter((pro) => pro.category === category);
+
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex items-center gap-3 text-white">
+          <button onClick={onBack} className="text-white text-lg">←</button>
+          <div>
+            <p className="text-blue-100 text-xs">Categoria</p>
+            <h2 className="text-lg font-semibold">{category}</h2>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-4">
+        {filteredProfessionals.map((pro) => (
+          <button
+            key={pro.name}
+            onClick={() => onSelectProfessional(pro.name)}
+            className="bg-white rounded-2xl p-4 shadow-sm text-left flex flex-col gap-3"
+          >
+            <div className="flex items-center gap-3">
+              <img
+                src={pro.photo}
+                alt={pro.name}
+                className="w-14 h-14 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <p className="font-semibold text-gray-900">{pro.name}</p>
+                  {pro.verified && <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">Verificado</span>}
+                </div>
+                <p className="text-xs text-gray-500">{pro.role}</p>
+                <div className="flex items-center gap-2 text-xs text-gray-600 mt-1">
+                  <span className="text-yellow-400">★</span>
+                  <span>{pro.rating}</span>
+                  <span className="text-gray-400">({pro.reviews} avaliações)</span>
+                </div>
+              </div>
+              <div className="text-xs text-blue-600 font-semibold">Ver perfil →</div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-600">📍 {pro.distance}</div>
+              <div className="bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-600">⚡ {pro.response}</div>
+              <div className="bg-blue-50 rounded-xl px-3 py-2 text-xs text-blue-700">💸 {pro.priceBadge}</div>
+              <div className="bg-green-50 rounded-xl px-3 py-2 text-xs text-green-700">✅ {pro.qualityBadge}</div>
+            </div>
+          </button>
+        ))}
+        {filteredProfessionals.length === 0 && (
+          <div className="bg-white rounded-2xl p-4 shadow-sm text-xs text-gray-500">
+            Nenhum profissional disponivel nesta categoria.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 8: Perfil do Profissional ───────────────────────────────────────
+
+function ProfessionalProfileScreen({
+  professional,
+  onBack,
+  onSchedule,
+}: {
+  professional: (typeof professionals)[number];
+  onBack: () => void;
+  onSchedule: (service: string) => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex items-center justify-between text-white">
+          <button onClick={onBack} className="text-white text-lg">←</button>
+          <span className="text-sm">Perfil do Profissional</span>
+          <button className="text-white text-lg">♡</button>
+        </div>
+        <div className="flex flex-col items-center mt-6">
+          <img
+            src={professional.photo}
+            alt={professional.name}
+            className="w-20 h-20 rounded-full object-cover border-4 border-white shadow"
+          />
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 -mt-6 pb-6">
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">{professional.name}</h2>
+              <p className="text-xs text-gray-400">{professional.role}</p>
+            </div>
+            {professional.verified && (
+              <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full">✓ Verificado</span>
+            )}
+          </div>
+          <div className="flex items-center gap-1 mt-2">
+            <span className="text-yellow-400">★</span>
+            <span className="text-sm font-medium text-gray-700">{professional.rating}</span>
+            <span className="text-xs text-gray-400">({professional.reviews} avaliações)</span>
+          </div>
+
+          <div className="flex gap-2 mt-3">
+            {["Eletricista", "Instalações", "Reformas"].map((tag) => (
+              <span key={tag} className="text-xs bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">{tag}</span>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-900 text-sm mb-2">Sobre</h3>
+          <p className="text-xs text-gray-500 leading-relaxed">
+            Especialista com 8 anos de experiência em instalações residenciais e comerciais. Foco em segurança, qualidade e atendimento rápido.
+          </p>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-semibold text-gray-900 text-sm">Serviços e Preços</h3>
+            <span className="text-xs text-blue-600">Ver todos</span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {professional.services.map((service) => (
+              <button
+                key={service.title}
+                onClick={() => onSchedule(service.title)}
+                className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-3 text-sm"
+              >
+                <span className="text-gray-700">{service.title}</span>
+                <span className="text-blue-700 font-semibold">{service.price}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="font-semibold text-gray-900 text-sm mb-2">Disponibilidade</h3>
+          <div className="grid grid-cols-5 gap-2 text-xs">
+            {[
+              { label: "Seg", active: true },
+              { label: "Ter" },
+              { label: "Qua", active: true },
+              { label: "Qui" },
+              { label: "Sex", active: true },
+            ].map((day) => (
+              <div
+                key={day.label}
+                className={`rounded-lg px-2 py-2 text-center ${day.active ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}
+              >
+                {day.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 pb-6">
+        <button onClick={() => onSchedule(professional.services[0].title)} className="w-full py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: "#E8643C" }}>
+          Agendar Serviço
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 9: Agendamento ───────────────────────────────────────────────────
+
+function ScheduleScreen({
+  professional,
+  selectedService,
+  onBack,
+  onConfirm,
+}: {
+  professional: (typeof professionals)[number];
+  selectedService: string;
+  onBack: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3 text-gray-800">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <h2 className="text-base font-semibold">Agendar Serviço</h2>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3">
+          <img
+            src={professional.photo}
+            alt={professional.name}
+            className="w-12 h-12 rounded-full object-cover"
+          />
+          <div className="flex-1">
+            <p className="font-semibold text-gray-900 text-sm">{professional.name}</p>
+            <p className="text-xs text-gray-400">{professional.role} • {professional.rating}</p>
+          </div>
+          <span className="text-xs font-semibold text-gray-600">R$ 80-120</span>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Tipo de Serviço</h3>
+          <div className="flex flex-col gap-2">
+            {professional.services.map((service) => (
+              <div
+                key={service.title}
+                className={`rounded-xl px-4 py-3 text-sm border ${service.title === selectedService ? "bg-blue-600 text-white border-blue-600" : "bg-white border-gray-200 text-gray-600"}`}
+              >
+                {service.title}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Selecione a Data</h3>
+          <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+              <button>←</button>
+              <span>Abril 2026</span>
+              <button>→</button>
+            </div>
+            <div className="grid grid-cols-7 gap-2 text-xs text-gray-400">
+              {"DSTQQSS".split("").map((d) => (
+                <div key={d} className="text-center">{d}</div>
+              ))}
+              {Array.from({ length: 30 }).map((_, idx) => {
+                const day = idx + 1;
+                const active = day === 9;
+                return (
+                  <div
+                    key={day}
+                    className={`text-center rounded-lg py-1 ${active ? "bg-blue-600 text-white" : "text-gray-500"}`}
+                  >
+                    {day}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-5">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Horário Disponível</h3>
+          <div className="flex gap-2">
+            {[
+              { time: "08:00" },
+              { time: "10:00", active: true },
+              { time: "14:00" },
+              { time: "16:00" },
+            ].map((slot) => (
+              <div
+                key={slot.time}
+                className={`rounded-xl px-4 py-2 text-xs ${slot.active ? "bg-blue-600 text-white" : "bg-white text-gray-500 border border-gray-200"}`}
+              >
+                {slot.time}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 pb-6">
+        <button onClick={onConfirm} className="w-full py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: "#E8643C" }}>
+          Confirmar Agendamento
+        </button>
+        <p className="text-xs text-center text-gray-400 mt-2">Cancelamento gratuito até 24h antes</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 10: Pagamento ────────────────────────────────────────────────────
+
+function PaymentScreen({
+  professional,
+  selectedService,
+  onBack,
+  onPay,
+}: {
+  professional: (typeof professionals)[number];
+  selectedService: string;
+  onBack: () => void;
+  onPay: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3 text-gray-800">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <h2 className="text-base font-semibold">Pagamento</h2>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Resumo do Pedido</h3>
+          <div className="text-xs text-gray-500">
+            {selectedService} - {professional.name}
+          </div>
+          <div className="text-xs text-gray-400 mb-2">Sex, 10 Abr • 10:00</div>
+          <div className="border-t border-dashed border-gray-200 my-3" />
+          <div className="flex justify-between text-xs text-gray-600">
+            <span>Subtotal</span>
+            <span>R$ 100,00</span>
+          </div>
+          <div className="flex justify-between text-xs text-gray-600 mt-1">
+            <span>Taxa de serviço</span>
+            <span>R$ 5,00</span>
+          </div>
+          <div className="mt-3 bg-blue-600 text-white rounded-xl px-3 py-2 text-sm font-semibold flex justify-between">
+            <span>Total</span>
+            <span>R$ 105,00</span>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Forma de Pagamento</h3>
+          <div className="flex flex-col gap-2">
+            <div className="bg-blue-600 text-white rounded-xl px-4 py-3 text-sm font-medium">Cartão de crédito</div>
+            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-sm">
+              <span>PIX</span>
+              <span className="text-xs text-gray-400">Instantâneo</span>
+            </div>
+            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-sm">
+              <span>Boleto</span>
+              <span className="text-xs text-gray-400">Vencimento em 3 dias</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Cupom de Desconto</h3>
+          <div className="flex gap-2">
+            <input className="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-500" placeholder="Insira seu cupom" />
+            <button className="bg-blue-600 text-white text-xs font-semibold px-4 rounded-xl">Aplicar</button>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Parcelas</h3>
+          <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-xs text-gray-600">
+            <span>1x de R$ 105,00 (sem juros)</span>
+            <span>⌄</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 pb-6">
+        <button onClick={onPay} className="w-full py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: "#10B981" }}>
+          Pagar Agora
+        </button>
+        <p className="text-[10px] text-center text-gray-400 mt-2">Ao pagar você concorda com os Termos de Serviço</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 11: Pedido Confirmado ────────────────────────────────────────────
+
+function OrderConfirmedScreen({ onTrack }: { onTrack: () => void }) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="flex-1 flex flex-col items-center px-6 pt-12">
+        <div className="w-24 h-24 rounded-full border-8 border-green-500 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-2xl">✓</div>
+        </div>
+        <h2 className="text-lg font-semibold text-gray-900 mt-4">Pedido Confirmado!</h2>
+        <p className="text-xs text-gray-500 text-center mt-1">Agendamento realizado com sucesso. Detalhes enviados por e-mail.</p>
+
+        <div className="w-full mt-5 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Detalhes do Agendamento</h3>
+          <div className="text-xs text-gray-500 flex justify-between">
+            <span>Profissional</span>
+            <span className="text-gray-800">Carlos Mendes</span>
+          </div>
+          <div className="text-xs text-gray-500 flex justify-between mt-1">
+            <span>Serviço</span>
+            <span className="text-gray-800">Instalação de tomadas</span>
+          </div>
+          <div className="text-xs text-gray-500 flex justify-between mt-1">
+            <span>Data e Hora</span>
+            <span className="text-gray-800">Sex, 10 Abr • 10:00</span>
+          </div>
+          <div className="text-xs text-gray-500 flex justify-between mt-1">
+            <span>Valor Pago</span>
+            <span className="text-green-600 font-semibold">R$ 105,00</span>
+          </div>
+          <div className="text-xs text-blue-600 mt-2">Código #OIK-20260410-4521</div>
+        </div>
+
+        <div className="w-full mt-4">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">O que acontece agora?</h3>
+          <div className="flex flex-col gap-2 text-xs text-gray-500">
+            {[
+              "O profissional confirma o horário em até 30 min",
+              "Você receberá lembrete 1h antes do serviço",
+              "Após o serviço, avalie o profissional",
+            ].map((item, idx) => (
+              <div key={item} className="flex items-start gap-2">
+                <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px]">{idx + 1}</div>
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 pb-8">
+        <button onClick={onTrack} className="w-full py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: "#4169E1" }}>
+          Acompanhar Pedido
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 12: Chat ─────────────────────────────────────────────────────────
+
+function ChatScreen({ onBack }: { onBack: () => void }) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-gray-900">Carlos Mendes</p>
+            <p className="text-xs text-green-500">Online agora</p>
+          </div>
+          <button className="text-gray-400">⋯</button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
+        <div className="bg-blue-600 text-white text-xs rounded-xl px-3 py-2">Instalação de tomadas - Agendado Sex 10/04</div>
+
+        <div className="self-start max-w-[75%] bg-white rounded-2xl px-3 py-2 text-xs text-gray-700 shadow-sm">
+          Olá! Confirmo o agendamento para 10h. Qualquer dúvida, fale!
+        </div>
+        <div className="self-end max-w-[75%] bg-blue-600 text-white rounded-2xl px-3 py-2 text-xs">
+          Perfeito! Vou deixar o portão aberto.
+        </div>
+        <div className="self-start max-w-[75%] bg-white rounded-2xl px-3 py-2 text-xs text-gray-700 shadow-sm">
+          Ok! Trarei todas as ferramentas necessárias.
+        </div>
+        <div className="self-end max-w-[75%] bg-blue-600 text-white rounded-2xl px-3 py-2 text-xs">
+          Obrigado! Até sexta.
+        </div>
+
+        <div className="mt-2">
+          <p className="text-[10px] text-gray-400">Respostas rápidas</p>
+          <div className="flex gap-2 mt-2">
+            {[
+              "Ok, confirmado!",
+              "Qual endereço?",
+              "Pode adiantar?",
+            ].map((text) => (
+              <div key={text} className="px-3 py-1 rounded-full bg-gray-100 text-[10px] text-gray-600">
+                {text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-2 bg-white rounded-2xl p-3 shadow-sm">
+          <p className="text-xs text-gray-500">Pedido #OIK-20260410-4521</p>
+          <p className="text-xs text-gray-400">Instalação de tomadas • Sex, 10 Abr • 10:00</p>
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-xs text-green-600">Status: Confirmado</span>
+            <button className="text-xs text-blue-600">Ver detalhes</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 pb-6">
+        <div className="flex items-center gap-2 bg-white rounded-2xl px-3 py-2 border border-gray-100">
+          <button className="text-gray-400">＋</button>
+          <input className="flex-1 text-xs text-gray-500" placeholder="Digite sua mensagem..." />
+          <button className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">➤</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ShieldCheckIcon({ size = 48 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -302,11 +801,137 @@ const categories = [
 ];
 
 const professionals = [
-  { name: "Carlos S.", role: "Eletricista", rating: 4.9, initial: "C", color: "#4169E1" },
-  { name: "Ana R.", role: "Diarista", rating: 4.8, initial: "A", color: "#F97316" },
+  {
+    name: "Carlos Mendes",
+    role: "Eletricista",
+    category: "Elétrica",
+    rating: 4.9,
+    reviews: 127,
+    initial: "C",
+    color: "#4169E1",
+    photo: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "2,4 km",
+    response: "Resposta em 15 min",
+    priceBadge: "Melhor preço",
+    qualityBadge: "Qualidade premium",
+    services: [
+      { title: "Instalação de tomadas", price: "R$ 80-120" },
+      { title: "Troca de disjuntor", price: "R$ 60-100" },
+      { title: "Laudo elétrico", price: "R$ 150-200" },
+    ],
+  },
+  {
+    name: "Ana Ribeiro",
+    role: "Diarista",
+    category: "Limpeza",
+    rating: 4.8,
+    reviews: 92,
+    initial: "A",
+    color: "#F97316",
+    photo: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "3,1 km",
+    response: "Resposta em 20 min",
+    priceBadge: "Bom custo",
+    qualityBadge: "Avaliação alta",
+    services: [
+      { title: "Limpeza completa", price: "R$ 120-180" },
+      { title: "Organização", price: "R$ 80-120" },
+      { title: "Passar roupa", price: "R$ 60-90" },
+    ],
+  },
+  {
+    name: "Joao Pires",
+    role: "Jardineiro",
+    category: "Jardim",
+    rating: 4.7,
+    reviews: 68,
+    initial: "J",
+    color: "#16A34A",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "1,9 km",
+    response: "Resposta em 10 min",
+    priceBadge: "Entrega rapida",
+    qualityBadge: "Muito elogiado",
+    services: [
+      { title: "Poda de jardim", price: "R$ 90-140" },
+      { title: "Paisagismo", price: "R$ 200-350" },
+      { title: "Manutencao mensal", price: "R$ 150-220" },
+    ],
+  },
+  {
+    name: "Marina Lopes",
+    role: "Encanadora",
+    category: "Hidraul.",
+    rating: 4.8,
+    reviews: 105,
+    initial: "M",
+    color: "#3B82F6",
+    photo: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "4,0 km",
+    response: "Resposta em 25 min",
+    priceBadge: "Melhor custo",
+    qualityBadge: "Atendimento rapido",
+    services: [
+      { title: "Desentupimento", price: "R$ 120-200" },
+      { title: "Troca de torneira", price: "R$ 70-110" },
+      { title: "Reparo de vazamento", price: "R$ 150-240" },
+    ],
+  },
+  {
+    name: "Lucas Costa",
+    role: "Reformas",
+    category: "Reformas",
+    rating: 4.6,
+    reviews: 54,
+    initial: "L",
+    color: "#EF4444",
+    photo: "https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "5,3 km",
+    response: "Resposta em 30 min",
+    priceBadge: "Equipe completa",
+    qualityBadge: "Pontualidade",
+    services: [
+      { title: "Pequenas reformas", price: "R$ 300-500" },
+      { title: "Drywall", price: "R$ 250-400" },
+      { title: "Reparo de paredes", price: "R$ 150-280" },
+    ],
+  },
+  {
+    name: "Patricia Dias",
+    role: "Pintora",
+    category: "Pintura",
+    rating: 4.9,
+    reviews: 119,
+    initial: "P",
+    color: "#A855F7",
+    photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop",
+    verified: true,
+    distance: "2,7 km",
+    response: "Resposta em 12 min",
+    priceBadge: "Acabamento fino",
+    qualityBadge: "Nota maxima",
+    services: [
+      { title: "Pintura interna", price: "R$ 220-360" },
+      { title: "Pintura externa", price: "R$ 320-480" },
+      { title: "Textura decorativa", price: "R$ 180-260" },
+    ],
+  },
 ];
 
-function HomeCliente({ onLogout }: { onLogout: () => void }) {
+function HomeCliente({
+  onLogout,
+  onOpenCategory,
+  onOpenProfessional,
+}: {
+  onLogout: () => void;
+  onOpenCategory: (category: string) => void;
+  onOpenProfessional: (name: string) => void;
+}) {
   const [activeTab, setActiveTab] = useState("home");
 
   return (
@@ -335,7 +960,11 @@ function HomeCliente({ onLogout }: { onLogout: () => void }) {
           </div>
           <div className="grid grid-cols-3 gap-3">
             {categories.map((cat) => (
-              <button key={cat.label} className="flex flex-col items-center gap-2 bg-white rounded-xl py-3 shadow-sm">
+              <button
+                key={cat.label}
+                onClick={() => onOpenCategory(cat.label)}
+                className="flex flex-col items-center gap-2 bg-white rounded-xl py-3 shadow-sm"
+              >
                 <div className="rounded-full w-10 h-10" style={{ backgroundColor: cat.color }} />
                 <span className="text-xs text-gray-600 font-medium">{cat.label}</span>
               </button>
@@ -352,9 +981,11 @@ function HomeCliente({ onLogout }: { onLogout: () => void }) {
           <div className="grid grid-cols-2 gap-3">
             {professionals.map((pro) => (
               <div key={pro.name} className="bg-white rounded-xl p-4 shadow-sm flex flex-col items-center gap-2">
-                <div className="w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-bold" style={{ backgroundColor: pro.color }}>
-                  {pro.initial}
-                </div>
+                <img
+                  src={pro.photo}
+                  alt={pro.name}
+                  className="w-14 h-14 rounded-full object-cover"
+                />
                 <div className="text-center">
                   <p className="font-semibold text-gray-900 text-sm">{pro.name}</p>
                   <p className="text-gray-400 text-xs">{pro.role}</p>
@@ -363,7 +994,11 @@ function HomeCliente({ onLogout }: { onLogout: () => void }) {
                   <span className="text-yellow-400 text-sm">★</span>
                   <span className="text-xs text-gray-600 font-medium">{pro.rating}</span>
                 </div>
-                <button className="w-full py-2 rounded-lg text-white text-xs font-semibold" style={{ backgroundColor: "#4169E1" }}>
+                <button
+                  onClick={() => onOpenProfessional(pro.name)}
+                  className="w-full py-2 rounded-lg text-white text-xs font-semibold"
+                  style={{ backgroundColor: "#4169E1" }}
+                >
                   Agendar
                 </button>
               </div>
@@ -398,10 +1033,25 @@ function HomeCliente({ onLogout }: { onLogout: () => void }) {
 
 // ─── App Shell ───────────────────────────────────────────────────────────────
 
-type Screen = "splash" | "onboarding1" | "onboarding2" | "onboarding3" | "login" | "home-cliente";
+type Screen =
+  | "splash"
+  | "onboarding1"
+  | "onboarding2"
+  | "onboarding3"
+  | "login"
+  | "home-cliente"
+  | "profissionais"
+  | "perfil"
+  | "agendamento"
+  | "pagamento"
+  | "confirmado"
+  | "chat";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("splash");
+  const [selectedCategory, setSelectedCategory] = useState("Elétrica");
+  const [selectedProfessional, setSelectedProfessional] = useState(professionals[0].name);
+  const [selectedService, setSelectedService] = useState(professionals[0].services[0].title);
 
   const screenLabels: Record<Screen, string> = {
     splash: "01 – Splash",
@@ -410,7 +1060,15 @@ export default function Home() {
     onboarding3: "04 – Onboarding 3",
     login: "05 – Login",
     "home-cliente": "06 – Home",
+    profissionais: "07 – Profissionais",
+    perfil: "08 – Perfil",
+    agendamento: "09 – Agendamento",
+    pagamento: "10 – Pagamento",
+    confirmado: "11 – Confirmado",
+    chat: "12 – Chat",
   };
+
+  const professional = professionals.find((pro) => pro.name === selectedProfessional) ?? professionals[0];
 
   function handleLogin(role: "cliente" | "profissional") {
     if (role === "cliente") setScreen("home-cliente");
@@ -426,10 +1084,75 @@ export default function Home() {
           {screen === "onboarding2" && <Onboarding2 onNext={() => setScreen("onboarding3")} onSkip={() => setScreen("login")} />}
           {screen === "onboarding3" && <Onboarding3 onStart={() => setScreen("login")} />}
           {screen === "login" && <LoginScreen onLogin={handleLogin} />}
-          {screen === "home-cliente" && <HomeCliente onLogout={() => setScreen("login")} />}
+          {screen === "home-cliente" && (
+            <HomeCliente
+              onLogout={() => setScreen("login")}
+              onOpenCategory={(category) => {
+                setSelectedCategory(category);
+                setScreen("profissionais");
+              }}
+              onOpenProfessional={(name) => {
+                setSelectedProfessional(name);
+                setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
+                setScreen("perfil");
+              }}
+            />
+          )}
+          {screen === "profissionais" && (
+            <ProfessionalsListScreen
+              category={selectedCategory}
+              onBack={() => setScreen("home-cliente")}
+              onSelectProfessional={(name) => {
+                setSelectedProfessional(name);
+                setSelectedService(professionals.find((pro) => pro.name === name)?.services[0].title ?? selectedService);
+                setScreen("perfil");
+              }}
+            />
+          )}
+          {screen === "perfil" && (
+            <ProfessionalProfileScreen
+              professional={professional}
+              onBack={() => setScreen("profissionais")}
+              onSchedule={(service) => {
+                setSelectedService(service);
+                setScreen("agendamento");
+              }}
+            />
+          )}
+          {screen === "agendamento" && (
+            <ScheduleScreen
+              professional={professional}
+              selectedService={selectedService}
+              onBack={() => setScreen("perfil")}
+              onConfirm={() => setScreen("pagamento")}
+            />
+          )}
+          {screen === "pagamento" && (
+            <PaymentScreen
+              professional={professional}
+              selectedService={selectedService}
+              onBack={() => setScreen("agendamento")}
+              onPay={() => setScreen("confirmado")}
+            />
+          )}
+          {screen === "confirmado" && <OrderConfirmedScreen onTrack={() => setScreen("chat")} />}
+          {screen === "chat" && <ChatScreen onBack={() => setScreen("confirmado")} />}
         </div>
         <div className="flex gap-2 mt-4 flex-wrap justify-center">
-          {(["splash", "onboarding1", "onboarding2", "onboarding3", "login", "home-cliente"] as Screen[]).map((s) => (
+          {([
+            "splash",
+            "onboarding1",
+            "onboarding2",
+            "onboarding3",
+            "login",
+            "home-cliente",
+            "profissionais",
+            "perfil",
+            "agendamento",
+            "pagamento",
+            "confirmado",
+            "chat",
+          ] as Screen[]).map((s) => (
             <button
               key={s}
               onClick={() => setScreen(s)}
