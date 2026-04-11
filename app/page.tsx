@@ -12,16 +12,235 @@ function OikosLogoIcon({ size = 40, color = "#4169E1" }: { size?: number; color?
   );
 }
 
+// ─── Screen 16: Chat Profissional ───────────────────────────────────────────
+
+function ProfessionalChatScreen({ onBack }: { onBack: () => void }) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-gray-900">Ana Paula S.</p>
+            <p className="text-xs text-green-500">Cliente online</p>
+          </div>
+          <button className="text-gray-400">⋯</button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
+        <div className="bg-blue-600 text-white text-xs rounded-xl px-3 py-2">Instalação de tomadas • Hoje 10:00</div>
+
+        <div className="self-end max-w-[75%] bg-blue-600 text-white rounded-2xl px-3 py-2 text-xs">
+          Olá, Ana! Estou a caminho e chego em 15 min.
+        </div>
+        <div className="self-start max-w-[75%] bg-white rounded-2xl px-3 py-2 text-xs text-gray-700 shadow-sm">
+          Perfeito! Portão estará aberto.
+        </div>
+        <div className="self-end max-w-[75%] bg-blue-600 text-white rounded-2xl px-3 py-2 text-xs">
+          Vou levar todas as ferramentas necessárias.
+        </div>
+
+        <div className="mt-2">
+          <p className="text-[10px] text-gray-400">Respostas rápidas</p>
+          <div className="flex gap-2 mt-2">
+            {["Chego em 10 min", "Já estou na rua", "Pode confirmar endereço?"].map((text) => (
+              <div key={text} className="px-3 py-1 rounded-full bg-gray-100 text-[10px] text-gray-600">
+                {text}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-2 bg-white rounded-2xl p-3 shadow-sm">
+          <p className="text-xs text-gray-500">Pedido #OIK-20260410-4521</p>
+          <p className="text-xs text-gray-400">Instalação de tomadas • Hoje 10:00</p>
+          <div className="flex items-center justify-between mt-2">
+            <span className="text-xs text-green-600">Status: Confirmado</span>
+            <button className="text-xs text-blue-600">Ver detalhes</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-5 pb-6">
+        <div className="flex items-center gap-2 bg-white rounded-2xl px-3 py-2 border border-gray-100">
+          <button className="text-gray-400">＋</button>
+          <input className="flex-1 text-xs text-gray-500" placeholder="Digite sua mensagem..." />
+          <button className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">➤</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 17: Ganhos Profissional ─────────────────────────────────────────
+
+function ProfessionalEarningsScreen({
+  onBack,
+  onOpenChat,
+  onOpenProfile,
+  onOpenRequests,
+}: {
+  onBack: () => void;
+  onOpenChat: () => void;
+  onOpenProfile: () => void;
+  onOpenRequests: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex items-center justify-between text-white">
+          <button onClick={onBack} className="text-white text-lg">←</button>
+          <span className="text-sm">Ganhos</span>
+          <button className="text-white text-lg">⋯</button>
+        </div>
+        <div className="mt-6">
+          <p className="text-blue-100 text-xs">Total no mês</p>
+          <h2 className="text-2xl font-semibold text-white">R$ 1.840,00</h2>
+          <p className="text-blue-200 text-xs">+12% em relação ao mês anterior</p>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 -mt-4 pb-6">
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900">Resumo da Semana</h3>
+          <div className="mt-4 grid grid-cols-7 gap-2 items-end">
+            {[50, 65, 40, 80, 55, 95, 60].map((value, idx) => (
+              <div key={value} className="flex flex-col items-center gap-2">
+                <div
+                  className="w-4 rounded-full"
+                  style={{ height: value, backgroundColor: idx === 5 ? "#2563EB" : "#E5E7EB" }}
+                />
+                <span className="text-[10px] text-gray-400">{["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"][idx]}</span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-3 flex items-center justify-between text-xs text-gray-500">
+            <span>R$ 460 nesta semana</span>
+            <span className="text-green-600">+8%</span>
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-3">Últimos pagamentos</h3>
+          {[
+            { label: "Instalação de tomadas", value: "R$ 120", date: "09 Abr" },
+            { label: "Troca de disjuntor", value: "R$ 90", date: "07 Abr" },
+            { label: "Laudo elétrico", value: "R$ 150", date: "05 Abr" },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center justify-between py-2 border-b last:border-b-0">
+              <div>
+                <p className="text-xs font-semibold text-gray-700">{item.label}</p>
+                <p className="text-[10px] text-gray-400">{item.date}</p>
+              </div>
+              <span className="text-xs text-green-600 font-semibold">{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onBack },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: () => {} },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-earnings" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 18: Pedidos Concluídos ──────────────────────────────────────────
+
+function ProfessionalCompletedScreen({
+  onBack,
+  onOpenChat,
+  onOpenProfile,
+  onOpenEarnings,
+}: {
+  onBack: () => void;
+  onOpenChat: () => void;
+  onOpenProfile: () => void;
+  onOpenEarnings: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <h2 className="text-lg font-semibold text-gray-900">Pedidos concluídos</h2>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
+        {[
+          { client: "Marcia Lima", service: "Instalação de tomadas", rating: "5,0", price: "R$ 120", date: "07 Abr" },
+          { client: "Pedro Souza", service: "Troca de disjuntor", rating: "4,8", price: "R$ 90", date: "05 Abr" },
+          { client: "Juliana Costa", service: "Laudo elétrico", rating: "4,9", price: "R$ 150", date: "03 Abr" },
+        ].map((item) => (
+          <div key={item.client} className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-900">{item.client}</p>
+                <p className="text-xs text-blue-600">{item.service}</p>
+              </div>
+              <span className="text-xs text-green-600 font-semibold">{item.price}</span>
+            </div>
+            <div className="flex items-center justify-between mt-3 text-xs text-gray-400">
+              <span>{item.date}</span>
+              <span className="text-yellow-500">★ {item.rating}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onBack },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onBack },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: onOpenEarnings },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-requests" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Screen 13: Dashboard Profissional ───────────────────────────────────────
 
 function ProfessionalDashboardScreen({
   onOpenRequests,
   onOpenProfile,
   onOpenChat,
+  onOpenEarnings,
 }: {
   onOpenRequests: () => void;
   onOpenProfile: () => void;
   onOpenChat: () => void;
+  onOpenEarnings: () => void;
 }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -111,6 +330,7 @@ function ProfessionalDashboardScreen({
         {([
           { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: () => {} },
           { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: onOpenEarnings },
           { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
           { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
         ]).map((tab) => (
@@ -135,10 +355,14 @@ function ProfessionalRequestsScreen({
   onBack,
   onOpenChat,
   onOpenProfile,
+  onOpenEarnings,
+  onOpenCompleted,
 }: {
   onBack: () => void;
   onOpenChat: () => void;
   onOpenProfile: () => void;
+  onOpenEarnings: () => void;
+  onOpenCompleted: () => void;
 }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -148,11 +372,9 @@ function ProfessionalRequestsScreen({
           <button className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Filtro</button>
         </div>
         <div className="flex gap-4 mt-4 text-xs font-semibold">
-          {["Novas (3)", "Aceitas", "Concluídas"].map((tab, idx) => (
-            <button key={tab} className={idx === 0 ? "text-white bg-blue-600 px-4 py-2 rounded-full" : "text-gray-400"}>
-              {tab}
-            </button>
-          ))}
+          <button className="text-white bg-blue-600 px-4 py-2 rounded-full">Novas (3)</button>
+          <button className="text-gray-400">Aceitas</button>
+          <button onClick={onOpenCompleted} className="text-gray-400">Concluídas</button>
         </div>
       </div>
 
@@ -192,6 +414,7 @@ function ProfessionalRequestsScreen({
         {([
           { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onBack },
           { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: () => {} },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: onOpenEarnings },
           { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
           { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
         ]).map((tab) => (
@@ -216,10 +439,12 @@ function ProfessionalProfileOwnerScreen({
   onOpenDashboard,
   onOpenRequests,
   onOpenChat,
+  onOpenEarnings,
 }: {
   onOpenDashboard: () => void;
   onOpenRequests: () => void;
   onOpenChat: () => void;
+  onOpenEarnings: () => void;
 }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -300,6 +525,7 @@ function ProfessionalProfileOwnerScreen({
         {([
           { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onOpenDashboard },
           { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: onOpenEarnings },
           { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
           { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: () => {} },
         ]).map((tab) => (
@@ -997,17 +1223,18 @@ function Onboarding3({ onStart }: { onStart: () => void }) {
 
 // ─── Screen 5: Login ─────────────────────────────────────────────────────────
 
-const CREDENTIALS = {
+const CREDENTIALS: Record<"cliente" | "profissional", { email: string; senha: string }> = {
   cliente: { email: "cliente@oikos.com", senha: "123456" },
   profissional: { email: "profissional@oikos.com", senha: "123456" },
 };
 
 function LoginScreen({ onLogin }: { onLogin: (role: "cliente" | "profissional") => void }) {
-  const [role, setRole] = useState<"cliente" | "profissional">("cliente");
+  const [role, setRole] = useState<keyof typeof CREDENTIALS>("cliente");
   const [error, setError] = useState(false);
 
-  const email = CREDENTIALS[role].email;
-  const senha = CREDENTIALS[role].senha;
+  const credentials = CREDENTIALS[role as keyof typeof CREDENTIALS];
+  const email = credentials.email;
+  const senha = credentials.senha;
 
   function handleLogin() {
     onLogin(role);
@@ -1358,7 +1585,9 @@ type Screen =
   | "pro-dashboard"
   | "pro-requests"
   | "pro-profile"
-  | "pro-chat";
+  | "pro-chat"
+  | "pro-earnings"
+  | "pro-completed";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("splash");
@@ -1384,6 +1613,8 @@ export default function Home() {
     "pro-requests": "P02 – Solicitações",
     "pro-profile": "P03 – Perfil",
     "pro-chat": "P04 – Chat",
+    "pro-earnings": "P05 – Ganhos",
+    "pro-completed": "P06 – Concluídos",
   };
 
   const professional = professionals.find((pro) => pro.name === selectedProfessional) ?? professionals[0];
@@ -1398,7 +1629,7 @@ export default function Home() {
   }
 
   const navigationScreens: Screen[] = userRole === "profissional"
-    ? ["pro-dashboard", "pro-requests", "pro-profile", "pro-chat"]
+    ? ["pro-dashboard", "pro-requests", "pro-earnings", "pro-chat", "pro-profile"]
     : userRole === "cliente"
       ? ["home-cliente", "profissionais", "perfil", "agendamento", "pagamento", "confirmado", "chat"]
       : ["splash", "onboarding1", "onboarding2", "onboarding3", "login"];
@@ -1415,6 +1646,7 @@ export default function Home() {
           onOpenRequests={() => setScreen("pro-requests")}
           onOpenProfile={() => setScreen("pro-profile")}
           onOpenChat={() => setScreen("pro-chat")}
+          onOpenEarnings={() => setScreen("pro-earnings")}
         />
       )}
       {screen === "pro-requests" && (
@@ -1422,6 +1654,8 @@ export default function Home() {
           onBack={() => setScreen("pro-dashboard")}
           onOpenChat={() => setScreen("pro-chat")}
           onOpenProfile={() => setScreen("pro-profile")}
+          onOpenEarnings={() => setScreen("pro-earnings")}
+          onOpenCompleted={() => setScreen("pro-completed")}
         />
       )}
       {screen === "pro-profile" && (
@@ -1429,9 +1663,26 @@ export default function Home() {
           onOpenDashboard={() => setScreen("pro-dashboard")}
           onOpenRequests={() => setScreen("pro-requests")}
           onOpenChat={() => setScreen("pro-chat")}
+          onOpenEarnings={() => setScreen("pro-earnings")}
         />
       )}
-      {screen === "pro-chat" && <ChatScreen onBack={() => setScreen("pro-dashboard")} />}
+      {screen === "pro-chat" && <ProfessionalChatScreen onBack={() => setScreen("pro-dashboard")} />}
+      {screen === "pro-earnings" && (
+        <ProfessionalEarningsScreen
+          onBack={() => setScreen("pro-dashboard")}
+          onOpenChat={() => setScreen("pro-chat")}
+          onOpenProfile={() => setScreen("pro-profile")}
+          onOpenRequests={() => setScreen("pro-requests")}
+        />
+      )}
+      {screen === "pro-completed" && (
+        <ProfessionalCompletedScreen
+          onBack={() => setScreen("pro-requests")}
+          onOpenChat={() => setScreen("pro-chat")}
+          onOpenProfile={() => setScreen("pro-profile")}
+          onOpenEarnings={() => setScreen("pro-earnings")}
+        />
+      )}
       {screen === "home-cliente" && (
         <HomeCliente
           onLogout={() => {
