@@ -12,6 +12,312 @@ function OikosLogoIcon({ size = 40, color = "#4169E1" }: { size?: number; color?
   );
 }
 
+// ─── Screen 13: Dashboard Profissional ───────────────────────────────────────
+
+function ProfessionalDashboardScreen({
+  onOpenRequests,
+  onOpenProfile,
+  onOpenChat,
+}: {
+  onOpenRequests: () => void;
+  onOpenProfile: () => void;
+  onOpenChat: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex items-center justify-between text-white">
+          <div>
+            <h2 className="text-lg font-semibold">Bom dia, Carlos!</h2>
+            <p className="text-blue-100 text-xs">Você tem 3 novos pedidos hoje</p>
+          </div>
+          <button onClick={onOpenProfile} className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-white text-sm">C</button>
+        </div>
+
+        <div className="mt-5 grid grid-cols-3 gap-3">
+          {[
+            { label: "Este mês", value: "R$ 1.840", color: "#10B981" },
+            { label: "Avaliação", value: "4.9", color: "#F59E0B" },
+            { label: "Serviços", value: "23", color: "#ffffff" },
+          ].map((card) => (
+            <div key={card.label} className="bg-white rounded-2xl px-3 py-3 shadow-sm">
+              <p className="text-xs text-gray-400">{card.label}</p>
+              <p className="text-base font-semibold" style={{ color: card.color === "#ffffff" ? "#111827" : card.color }}>
+                {card.value}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-4">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900">Agenda de Hoje</h3>
+          <p className="text-xs text-gray-400">Quinta, 9 de Abril</p>
+        </div>
+        {[
+          { time: "10:00", title: "Instalação de tomadas", client: "Ana Paula - Rua das Flores, 123", status: "Confirmado", color: "#10B981" },
+          { time: "14:00", title: "Troca de disjuntor", client: "Pedro Lima - Av. Paulista, 456", status: "Pendente", color: "#F59E0B" },
+          { time: "16:30", title: "Laudo elétrico", client: "Maria Costa - R. Augusta, 789", status: "Agendado", color: "#2563EB" },
+        ].map((item) => (
+          <div key={item.title} className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-3">
+            <div className="w-1 h-12 rounded-full" style={{ backgroundColor: item.color }} />
+            <div className="flex-1">
+              <p className="text-xs text-gray-400">{item.time}</p>
+              <p className="text-sm font-semibold text-gray-900">{item.title}</p>
+              <p className="text-xs text-gray-400">{item.client}</p>
+            </div>
+            <span className="text-xs text-white px-3 py-1 rounded-full" style={{ backgroundColor: item.color }}>
+              {item.status}
+            </span>
+          </div>
+        ))}
+
+        <div className="bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900">Ganhos da Semana</h3>
+          <div className="mt-3 grid grid-cols-7 gap-2 items-end">
+            {[40, 60, 30, 70, 45, 90, 55].map((value, idx) => (
+              <div key={value} className="flex flex-col items-center gap-2">
+                <div
+                  className="w-4 rounded-full"
+                  style={{ height: value, backgroundColor: idx === 5 ? "#2563EB" : "#E5E7EB" }}
+                />
+                <span className="text-[10px] text-gray-400">{["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"][idx]}</span>
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-green-600 mt-3">R$ 460 esta semana</p>
+          <p className="text-[10px] text-gray-400">12% a mais que semana anterior</p>
+        </div>
+
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Ações Rápidas</h3>
+          <div className="grid grid-cols-3 gap-2">
+            {["Nova Proposta", "Solicitações", "Meu Perfil"].map((label, idx) => (
+              <button
+                key={label}
+                onClick={idx === 1 ? onOpenRequests : onOpenProfile}
+                className="rounded-xl py-3 text-xs font-semibold"
+                style={{ backgroundColor: idx === 0 ? "#F97316" : idx === 1 ? "#4169E1" : "#6B7280", color: "white" }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: () => {} },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-dashboard" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 14: Solicitações Profissional ───────────────────────────────────
+
+function ProfessionalRequestsScreen({
+  onBack,
+  onOpenChat,
+  onOpenProfile,
+}: {
+  onBack: () => void;
+  onOpenChat: () => void;
+  onOpenProfile: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-900">Solicitações</h2>
+          <button className="text-xs text-blue-600 bg-blue-50 px-3 py-1 rounded-full">Filtro</button>
+        </div>
+        <div className="flex gap-4 mt-4 text-xs font-semibold">
+          {["Novas (3)", "Aceitas", "Concluídas"].map((tab, idx) => (
+            <button key={tab} className={idx === 0 ? "text-white bg-blue-600 px-4 py-2 rounded-full" : "text-gray-400"}>
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-3">
+        {[
+          { name: "Ana Paula S.", service: "Instalação de tomadas", address: "Rua das Flores, 123", time: "Hoje 10:00", price: "R$ 80-120" },
+          { name: "Roberto Lima", service: "Troca de disjuntor", address: "Av. Paulista, 456", time: "Hoje 14:00", price: "R$ 60-100" },
+          { name: "Sandra Costa", service: "Laudo elétrico", address: "R. Augusta, 789", time: "Amanhã 09:00", price: "R$ 150-200" },
+        ].map((req, idx) => (
+          <div key={req.name} className={`bg-white rounded-2xl p-4 shadow-sm ${idx === 2 ? "border border-blue-500" : ""}`}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-semibold">
+                  {req.name[0]}
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-gray-900">{req.name}</p>
+                  <p className="text-xs text-blue-600">{req.service}</p>
+                </div>
+              </div>
+              <span className="text-[10px] text-white bg-orange-500 px-3 py-1 rounded-full">Nova</span>
+            </div>
+            <p className="text-xs text-gray-400 mt-2">{req.address}</p>
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">{req.time}</span>
+              <span className="text-xs text-green-600 bg-green-50 px-3 py-1 rounded-full">{req.price}</span>
+            </div>
+            <div className="flex gap-2 mt-3">
+              <button className="flex-1 bg-green-500 text-white text-xs font-semibold py-2 rounded-xl">Aceitar</button>
+              <button className="flex-1 bg-gray-100 text-gray-500 text-xs font-semibold py-2 rounded-xl">Recusar</button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onBack },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: () => {} },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-requests" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Screen 15: Perfil Profissional ─────────────────────────────────────────
+
+function ProfessionalProfileOwnerScreen({
+  onOpenDashboard,
+  onOpenRequests,
+  onOpenChat,
+}: {
+  onOpenDashboard: () => void;
+  onOpenRequests: () => void;
+  onOpenChat: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full bg-gray-50">
+      <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
+        <div className="flex items-center justify-between text-white">
+          <button onClick={onOpenDashboard} className="text-white text-lg">←</button>
+          <span className="text-sm">Meu Perfil</span>
+          <button className="text-white text-sm">Editar</button>
+        </div>
+        <div className="flex flex-col items-center mt-6">
+          <div className="relative">
+            <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl font-bold">C</div>
+            <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-green-500 border-2 border-white" />
+          </div>
+          <h3 className="text-white text-lg font-semibold mt-3">Carlos Mendes</h3>
+          <p className="text-blue-100 text-xs">Eletricista</p>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 -mt-6 pb-6">
+        <div className="bg-white rounded-2xl p-4 shadow-sm grid grid-cols-4 gap-2 text-center text-xs">
+          {[
+            { label: "Avaliação", value: "4.9" },
+            { label: "Aval.", value: "127" },
+            { label: "Serviços", value: "23" },
+            { label: "Anos", value: "8" },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <p className="text-blue-600 font-semibold">{stat.value}</p>
+              <p className="text-gray-400 text-[10px]">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 bg-green-500 text-white rounded-2xl px-4 py-3 text-center text-xs font-semibold">
+          Profissional Verificado pelo Oikos
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Sobre mim</h3>
+          <p className="text-xs text-gray-500">
+            Eletricista com 8 anos de experiência em instalações residenciais e comerciais.
+          </p>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Meus Serviços</h3>
+          <div className="flex flex-col gap-2">
+            {[
+              { title: "Instalação de tomadas", price: "R$ 80-120" },
+              { title: "Troca de disjuntor", price: "R$ 60-100" },
+              { title: "Laudo elétrico", price: "R$ 150-200" },
+              { title: "Projeto elétrico", price: "R$ 250-500" },
+            ].map((service) => (
+              <div key={service.title} className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-3 text-xs">
+                <span>{service.title}</span>
+                <span className="text-green-600 font-semibold">{service.price}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
+          <h3 className="text-sm font-semibold text-gray-900 mb-2">Documentos e Certificações</h3>
+          {[
+            { doc: "CREA / CAU", status: "Verificado" },
+            { doc: "NR-10", status: "Verificado" },
+          ].map((item) => (
+            <div key={item.doc} className="flex items-center justify-between text-xs text-gray-500 py-2 border-b last:border-b-0">
+              <span>{item.doc}</span>
+              <span className="text-green-600 bg-green-50 px-3 py-1 rounded-full">{item.status}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onOpenDashboard },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: onOpenChat },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: () => {} },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-profile" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ─── Screen 7: Lista de Profissionais ───────────────────────────────────────
 
 function ProfessionalsListScreen({
@@ -1048,10 +1354,15 @@ type Screen =
   | "agendamento"
   | "pagamento"
   | "confirmado"
-  | "chat";
+  | "chat"
+  | "pro-dashboard"
+  | "pro-requests"
+  | "pro-profile"
+  | "pro-chat";
 
 export default function Home() {
   const [screen, setScreen] = useState<Screen>("splash");
+  const [userRole, setUserRole] = useState<"cliente" | "profissional" | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("Elétrica");
   const [selectedProfessional, setSelectedProfessional] = useState(professionals[0].name);
   const [selectedService, setSelectedService] = useState(professionals[0].services[0].title);
@@ -1069,13 +1380,28 @@ export default function Home() {
     pagamento: "10 – Pagamento",
     confirmado: "11 – Confirmado",
     chat: "12 – Chat",
+    "pro-dashboard": "P01 – Dashboard",
+    "pro-requests": "P02 – Solicitações",
+    "pro-profile": "P03 – Perfil",
+    "pro-chat": "P04 – Chat",
   };
 
   const professional = professionals.find((pro) => pro.name === selectedProfessional) ?? professionals[0];
 
   function handleLogin(role: "cliente" | "profissional") {
-    if (role === "cliente") setScreen("home-cliente");
+    setUserRole(role);
+    if (role === "cliente") {
+      setScreen("home-cliente");
+    } else {
+      setScreen("pro-dashboard");
+    }
   }
+
+  const navigationScreens: Screen[] = userRole === "profissional"
+    ? ["pro-dashboard", "pro-requests", "pro-profile", "pro-chat"]
+    : userRole === "cliente"
+      ? ["home-cliente", "profissionais", "perfil", "agendamento", "pagamento", "confirmado", "chat"]
+      : ["splash", "onboarding1", "onboarding2", "onboarding3", "login"];
 
   const screenContent = (
     <>
@@ -1084,9 +1410,34 @@ export default function Home() {
       {screen === "onboarding2" && <Onboarding2 onNext={() => setScreen("onboarding3")} onSkip={() => setScreen("login")} />}
       {screen === "onboarding3" && <Onboarding3 onStart={() => setScreen("login")} />}
       {screen === "login" && <LoginScreen onLogin={handleLogin} />}
+      {screen === "pro-dashboard" && (
+        <ProfessionalDashboardScreen
+          onOpenRequests={() => setScreen("pro-requests")}
+          onOpenProfile={() => setScreen("pro-profile")}
+          onOpenChat={() => setScreen("pro-chat")}
+        />
+      )}
+      {screen === "pro-requests" && (
+        <ProfessionalRequestsScreen
+          onBack={() => setScreen("pro-dashboard")}
+          onOpenChat={() => setScreen("pro-chat")}
+          onOpenProfile={() => setScreen("pro-profile")}
+        />
+      )}
+      {screen === "pro-profile" && (
+        <ProfessionalProfileOwnerScreen
+          onOpenDashboard={() => setScreen("pro-dashboard")}
+          onOpenRequests={() => setScreen("pro-requests")}
+          onOpenChat={() => setScreen("pro-chat")}
+        />
+      )}
+      {screen === "pro-chat" && <ChatScreen onBack={() => setScreen("pro-dashboard")} />}
       {screen === "home-cliente" && (
         <HomeCliente
-          onLogout={() => setScreen("login")}
+          onLogout={() => {
+            setUserRole(null);
+            setScreen("login");
+          }}
           onOpenCategory={(category) => {
             setSelectedCategory(category);
             setScreen("profissionais");
@@ -1159,7 +1510,7 @@ export default function Home() {
               <p className="text-sm font-semibold text-gray-800">{screenLabels[screen]}</p>
             </div>
             <div className="flex flex-col gap-2">
-              {(Object.keys(screenLabels) as Screen[]).map((s) => (
+              {navigationScreens.map((s) => (
                 <button
                   key={s}
                   onClick={() => setScreen(s)}
@@ -1187,20 +1538,7 @@ export default function Home() {
               {screenContent}
             </div>
             <div className="flex gap-2 mt-4 flex-wrap justify-center">
-              {([
-                "splash",
-                "onboarding1",
-                "onboarding2",
-                "onboarding3",
-                "login",
-                "home-cliente",
-                "profissionais",
-                "perfil",
-                "agendamento",
-                "pagamento",
-                "confirmado",
-                "chat",
-              ] as Screen[]).map((s) => (
+              {navigationScreens.map((s) => (
                 <button
                   key={s}
                   onClick={() => setScreen(s)}
