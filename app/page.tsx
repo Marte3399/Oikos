@@ -236,11 +236,13 @@ function ProfessionalDashboardScreen({
   onOpenProfile,
   onOpenChat,
   onOpenEarnings,
+  onLogout,
 }: {
   onOpenRequests: () => void;
   onOpenProfile: () => void;
   onOpenChat: () => void;
   onOpenEarnings: () => void;
+  onLogout: () => void;
 }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -250,7 +252,10 @@ function ProfessionalDashboardScreen({
             <h2 className="text-lg font-semibold">Bom dia, Carlos!</h2>
             <p className="text-blue-100 text-xs">Você tem 3 novos pedidos hoje</p>
           </div>
-          <button onClick={onOpenProfile} className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-white text-sm">C</button>
+          <div className="flex items-center gap-2">
+            <button onClick={onLogout} className="text-xs font-semibold bg-white/20 px-3 py-1 rounded-full">Sair</button>
+            <button onClick={onOpenProfile} className="w-10 h-10 rounded-full bg-white/30 flex items-center justify-center text-white text-sm">C</button>
+          </div>
         </div>
 
         <div className="mt-5 grid grid-cols-3 gap-3">
@@ -625,6 +630,13 @@ function ProfessionalProfileScreen({
   onBack: () => void;
   onSchedule: (service: string) => void;
 }) {
+  const [selectedService, setSelectedService] = useState(professional.services[0]?.title ?? "");
+  const [selectedDay, setSelectedDay] = useState("Seg");
+
+  useEffect(() => {
+    setSelectedService(professional.services[0]?.title ?? "");
+  }, [professional]);
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <div className="px-5 pt-10 pb-6" style={{ backgroundColor: "#4169E1" }}>
@@ -676,17 +688,23 @@ function ProfessionalProfileScreen({
         <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-semibold text-gray-900 text-sm">Serviços e Preços</h3>
-            <span className="text-xs text-blue-600">Ver todos</span>
+            <button className="text-xs text-blue-600">Ver todos</button>
           </div>
           <div className="flex flex-col gap-2">
             {professional.services.map((service) => (
               <button
                 key={service.title}
-                onClick={() => onSchedule(service.title)}
-                className="flex items-center justify-between bg-gray-50 rounded-xl px-3 py-3 text-sm"
+                onClick={() => setSelectedService(service.title)}
+                className={`flex items-center justify-between rounded-xl px-3 py-3 text-sm border ${
+                  selectedService === service.title
+                    ? "bg-blue-600 text-white border-blue-600"
+                    : "bg-gray-50 text-gray-700 border-transparent"
+                }`}
               >
-                <span className="text-gray-700">{service.title}</span>
-                <span className="text-blue-700 font-semibold">{service.price}</span>
+                <span>{service.title}</span>
+                <span className={selectedService === service.title ? "text-white font-semibold" : "text-blue-700 font-semibold"}>
+                  {service.price}
+                </span>
               </button>
             ))}
           </div>
@@ -702,19 +720,30 @@ function ProfessionalProfileScreen({
               { label: "Qui" },
               { label: "Sex", active: true },
             ].map((day) => (
-              <div
+              <button
                 key={day.label}
-                className={`rounded-lg px-2 py-2 text-center ${day.active ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-400"}`}
+                onClick={() => setSelectedDay(day.label)}
+                className={`rounded-lg px-2 py-2 text-center ${
+                  selectedDay === day.label
+                    ? "bg-blue-600 text-white"
+                    : day.active
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-gray-100 text-gray-400"
+                }`}
               >
                 {day.label}
-              </div>
+              </button>
             ))}
           </div>
         </div>
       </div>
 
       <div className="px-5 pb-6">
-        <button onClick={() => onSchedule(professional.services[0].title)} className="w-full py-3 rounded-xl text-white font-semibold" style={{ backgroundColor: "#E8643C" }}>
+        <button
+          onClick={() => onSchedule(selectedService || professional.services[0].title)}
+          className="w-full py-3 rounded-xl text-white font-semibold"
+          style={{ backgroundColor: "#E8643C" }}
+        >
           Agendar Serviço
         </button>
       </div>
@@ -735,6 +764,14 @@ function ScheduleScreen({
   onBack: () => void;
   onConfirm: () => void;
 }) {
+  const [serviceChoice, setServiceChoice] = useState(selectedService);
+  const [selectedDate, setSelectedDate] = useState(9);
+  const [selectedTime, setSelectedTime] = useState("10:00");
+
+  useEffect(() => {
+    setServiceChoice(selectedService);
+  }, [selectedService]);
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
@@ -762,12 +799,13 @@ function ScheduleScreen({
           <h3 className="text-sm font-semibold text-gray-900 mb-2">Tipo de Serviço</h3>
           <div className="flex flex-col gap-2">
             {professional.services.map((service) => (
-              <div
+              <button
                 key={service.title}
-                className={`rounded-xl px-4 py-3 text-sm border ${service.title === selectedService ? "bg-blue-600 text-white border-blue-600" : "bg-white border-gray-200 text-gray-600"}`}
+                onClick={() => setServiceChoice(service.title)}
+                className={`rounded-xl px-4 py-3 text-sm border text-left ${service.title === serviceChoice ? "bg-blue-600 text-white border-blue-600" : "bg-white border-gray-200 text-gray-600"}`}
               >
                 {service.title}
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -786,14 +824,15 @@ function ScheduleScreen({
               ))}
               {Array.from({ length: 30 }).map((_, idx) => {
                 const day = idx + 1;
-                const active = day === 9;
+                const active = day === selectedDate;
                 return (
-                  <div
+                  <button
                     key={day}
+                    onClick={() => setSelectedDate(day)}
                     className={`text-center rounded-lg py-1 ${active ? "bg-blue-600 text-white" : "text-gray-500"}`}
                   >
                     {day}
-                  </div>
+                  </button>
                 );
               })}
             </div>
@@ -805,16 +844,17 @@ function ScheduleScreen({
           <div className="flex gap-2">
             {[
               { time: "08:00" },
-              { time: "10:00", active: true },
+              { time: "10:00" },
               { time: "14:00" },
               { time: "16:00" },
             ].map((slot) => (
-              <div
+              <button
                 key={slot.time}
-                className={`rounded-xl px-4 py-2 text-xs ${slot.active ? "bg-blue-600 text-white" : "bg-white text-gray-500 border border-gray-200"}`}
+                onClick={() => setSelectedTime(slot.time)}
+                className={`rounded-xl px-4 py-2 text-xs ${selectedTime === slot.time ? "bg-blue-600 text-white" : "bg-white text-gray-500 border border-gray-200"}`}
               >
                 {slot.time}
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -843,6 +883,19 @@ function PaymentScreen({
   onBack: () => void;
   onPay: () => void;
 }) {
+  const [paymentMethod, setPaymentMethod] = useState("Cartão de crédito");
+  const [installmentsOpen, setInstallmentsOpen] = useState(false);
+  const [selectedInstallment, setSelectedInstallment] = useState("1x de R$ 105,00 (sem juros)");
+  const [coupon, setCoupon] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+
+  const installments = [
+    "1x de R$ 105,00 (sem juros)",
+    "2x de R$ 52,50 (sem juros)",
+    "3x de R$ 35,00 (sem juros)",
+    "4x de R$ 26,90 (com juros)",
+  ];
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
@@ -877,32 +930,81 @@ function PaymentScreen({
         <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 mb-3">Forma de Pagamento</h3>
           <div className="flex flex-col gap-2">
-            <div className="bg-blue-600 text-white rounded-xl px-4 py-3 text-sm font-medium">Cartão de crédito</div>
-            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-sm">
-              <span>PIX</span>
-              <span className="text-xs text-gray-400">Instantâneo</span>
-            </div>
-            <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-sm">
-              <span>Boleto</span>
-              <span className="text-xs text-gray-400">Vencimento em 3 dias</span>
-            </div>
+            {[
+              { label: "Cartão de crédito" },
+              { label: "PIX", subtitle: "Instantâneo" },
+              { label: "Boleto", subtitle: "Vencimento em 3 dias" },
+            ].map((method) => (
+              <button
+                key={method.label}
+                onClick={() => setPaymentMethod(method.label)}
+                className={`flex items-center justify-between rounded-xl px-4 py-3 text-sm ${
+                  paymentMethod === method.label
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-50 text-gray-600"
+                }`}
+              >
+                <span>{method.label}</span>
+                {method.subtitle && (
+                  <span className={paymentMethod === method.label ? "text-blue-100 text-xs" : "text-xs text-gray-400"}>
+                    {method.subtitle}
+                  </span>
+                )}
+              </button>
+            ))}
           </div>
         </div>
 
         <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 mb-3">Cupom de Desconto</h3>
           <div className="flex gap-2">
-            <input className="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-500" placeholder="Insira seu cupom" />
-            <button className="bg-blue-600 text-white text-xs font-semibold px-4 rounded-xl">Aplicar</button>
+            <input
+              value={coupon}
+              onChange={(event) => setCoupon(event.target.value)}
+              className="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-500"
+              placeholder="Insira seu cupom"
+            />
+            <button
+              onClick={() => setCouponApplied(Boolean(coupon.trim()))}
+              className={`text-xs font-semibold px-4 rounded-xl ${couponApplied ? "bg-green-600 text-white" : "bg-blue-600 text-white"}`}
+            >
+              {couponApplied ? "Aplicado" : "Aplicar"}
+            </button>
           </div>
+          {couponApplied && (
+            <p className="text-[10px] text-green-600 mt-2">Cupom aplicado com sucesso.</p>
+          )}
         </div>
 
         <div className="mt-4 bg-white rounded-2xl p-4 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 mb-3">Parcelas</h3>
-          <div className="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-xs text-gray-600">
-            <span>1x de R$ 105,00 (sem juros)</span>
-            <span>⌄</span>
-          </div>
+          <button
+            onClick={() => setInstallmentsOpen(!installmentsOpen)}
+            className="w-full flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 text-xs text-gray-600"
+          >
+            <span>{selectedInstallment}</span>
+            <span>{installmentsOpen ? "⌃" : "⌄"}</span>
+          </button>
+          {installmentsOpen && (
+            <div className="mt-2 flex flex-col gap-2">
+              {installments.map((installment) => (
+                <button
+                  key={installment}
+                  onClick={() => {
+                    setSelectedInstallment(installment);
+                    setInstallmentsOpen(false);
+                  }}
+                  className={`rounded-xl px-4 py-2 text-xs text-left ${
+                    selectedInstallment === installment
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-50 text-gray-600"
+                  }`}
+                >
+                  {installment}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -1647,6 +1749,10 @@ export default function Home() {
           onOpenProfile={() => setScreen("pro-profile")}
           onOpenChat={() => setScreen("pro-chat")}
           onOpenEarnings={() => setScreen("pro-earnings")}
+          onLogout={() => {
+            setUserRole(null);
+            setScreen("login");
+          }}
         />
       )}
       {screen === "pro-requests" && (
