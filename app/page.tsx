@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 
 // ─── Icons ───────────────────────────────────────────────────────────────────
 
@@ -14,7 +14,19 @@ function OikosLogoIcon({ size = 40, color = "#4169E1" }: { size?: number; color?
 
 // ─── Screen 16: Chat Profissional ───────────────────────────────────────────
 
-function ProfessionalChatScreen({ onBack }: { onBack: () => void }) {
+function ProfessionalChatScreen({
+  onBack,
+  onOpenDashboard,
+  onOpenRequests,
+  onOpenEarnings,
+  onOpenProfile,
+}: {
+  onBack: () => void;
+  onOpenDashboard: () => void;
+  onOpenRequests: () => void;
+  onOpenEarnings: () => void;
+  onOpenProfile: () => void;
+}) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
       <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
@@ -68,6 +80,26 @@ function ProfessionalChatScreen({ onBack }: { onBack: () => void }) {
           <input className="flex-1 text-xs text-gray-500" placeholder="Digite sua mensagem..." />
           <button className="bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full">➤</button>
         </div>
+      </div>
+
+      <div className="flex border-t border-gray-100 bg-white px-2 py-2">
+        {([
+          { id: "pro-dashboard", label: "Início", icon: "home" as const, onClick: onOpenDashboard },
+          { id: "pro-requests", label: "Pedidos", icon: "orders" as const, onClick: onOpenRequests },
+          { id: "pro-earnings", label: "Ganhos", icon: "search" as const, onClick: onOpenEarnings },
+          { id: "pro-chat", label: "Chat", icon: "chat" as const, onClick: () => {} },
+          { id: "pro-profile", label: "Perfil", icon: "profile" as const, onClick: onOpenProfile },
+        ]).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={tab.onClick}
+            className="flex-1 flex flex-col items-center gap-1 py-1"
+            style={{ color: tab.id === "pro-chat" ? "#4169E1" : "#9CA3AF" }}
+          >
+            <NavIcon type={tab.icon} />
+            <span className="text-xs">{tab.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -960,7 +992,7 @@ function PaymentScreen({
           <div className="flex gap-2">
             <input
               value={coupon}
-              onChange={(event) => setCoupon(event.target.value)}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => setCoupon(event.target.value)}
               className="flex-1 bg-gray-50 rounded-xl px-3 py-2 text-xs text-gray-500"
               placeholder="Insira seu cupom"
             />
@@ -1020,10 +1052,17 @@ function PaymentScreen({
 
 // ─── Screen 11: Pedido Confirmado ────────────────────────────────────────────
 
-function OrderConfirmedScreen({ onTrack }: { onTrack: () => void }) {
+function OrderConfirmedScreen({ onTrack, onBack }: { onTrack: () => void; onBack: () => void }) {
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      <div className="flex-1 flex flex-col items-center px-6 pt-12">
+      <div className="px-5 pt-10 pb-4 bg-white border-b border-gray-100">
+        <div className="flex items-center gap-3 text-gray-800">
+          <button onClick={onBack} className="text-gray-600 text-lg">←</button>
+          <h2 className="text-base font-semibold">Pedido Confirmado</h2>
+        </div>
+      </div>
+
+      <div className="flex-1 flex flex-col items-center px-6 pt-8">
         <div className="w-24 h-24 rounded-full border-8 border-green-500 flex items-center justify-center">
           <div className="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white text-2xl">✓</div>
         </div>
@@ -1427,12 +1466,12 @@ function LoginScreen({ onLogin }: { onLogin: (role: "cliente" | "profissional") 
 // ─── Screen 6: Home Cliente ───────────────────────────────────────────────────
 
 const categories = [
-  { label: "Elétrica", color: "#F59E0B" },
-  { label: "Limpeza", color: "#22C55E" },
-  { label: "Jardim", color: "#16A34A" },
-  { label: "Hidraul.", color: "#3B82F6" },
-  { label: "Reformas", color: "#EF4444" },
-  { label: "Pintura", color: "#A855F7" },
+  { label: "Elétrica", color: "#F59E0B", icon: "⚡" },
+  { label: "Limpeza", color: "#22C55E", icon: "🧼" },
+  { label: "Jardim", color: "#16A34A", icon: "🌿" },
+  { label: "Hidraul.", color: "#3B82F6", icon: "💧" },
+  { label: "Reformas", color: "#EF4444", icon: "🧱" },
+  { label: "Pintura", color: "#A855F7", icon: "🎨" },
 ];
 
 const professionals = [
@@ -1603,7 +1642,12 @@ function HomeCliente({
                 onClick={() => onOpenCategory(cat.label)}
                 className="flex flex-col items-center gap-2 bg-white rounded-xl py-3 shadow-sm"
               >
-                <div className="rounded-full w-10 h-10" style={{ backgroundColor: cat.color }} />
+                <div
+                  className="rounded-full w-10 h-10 flex items-center justify-center text-lg"
+                  style={{ backgroundColor: cat.color, color: "white" }}
+                >
+                  {cat.icon}
+                </div>
                 <span className="text-xs text-gray-600 font-medium">{cat.label}</span>
               </button>
             ))}
@@ -1772,7 +1816,15 @@ export default function Home() {
           onOpenEarnings={() => setScreen("pro-earnings")}
         />
       )}
-      {screen === "pro-chat" && <ProfessionalChatScreen onBack={() => setScreen("pro-dashboard")} />}
+      {screen === "pro-chat" && (
+        <ProfessionalChatScreen
+          onBack={() => setScreen("pro-dashboard")}
+          onOpenDashboard={() => setScreen("pro-dashboard")}
+          onOpenRequests={() => setScreen("pro-requests")}
+          onOpenEarnings={() => setScreen("pro-earnings")}
+          onOpenProfile={() => setScreen("pro-profile")}
+        />
+      )}
       {screen === "pro-earnings" && (
         <ProfessionalEarningsScreen
           onBack={() => setScreen("pro-dashboard")}
@@ -1843,7 +1895,12 @@ export default function Home() {
           onPay={() => setScreen("confirmado")}
         />
       )}
-      {screen === "confirmado" && <OrderConfirmedScreen onTrack={() => setScreen("chat")} />}
+      {screen === "confirmado" && (
+        <OrderConfirmedScreen
+          onTrack={() => setScreen("chat")}
+          onBack={() => setScreen("pagamento")}
+        />
+      )}
       {screen === "chat" && <ChatScreen onBack={() => setScreen("confirmado")} />}
     </>
   );
